@@ -26,30 +26,51 @@ public class TodoController {
     // todoList 목록 조회
     @GetMapping("/todos")
     public String getTodos(Model model) {
-        TodoDTO recentTodo = todoService.getRecentTodo();
-        List<TodoDTO> todos = todoService.getAllTodos();
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        String loggedInUsername = loggedInUser.getUserName();
+        List<TodoDTO> todos = todoService.getTodosByUserName(loggedInUsername);
+        TodoDTO recentTodo = todoService.getRecentTodoByUsername(loggedInUsername);
         model.addAttribute("recentTodo", recentTodo);
         model.addAttribute("todos", todos);
-        return "todoList"; // Thymeleaf 템플릿 이름 반환
+        return "todoList";
     }
 
     // todoList 할일 추가
     @PostMapping("/todos/add")
     public String addTodo(@RequestParam String title, HttpSession session) {
-        String userName = ((User) session.getAttribute("loggedInUser")).getUserName();
+        try {
+            if (title == null || title.isEmpty()) {
+                throw new IllegalArgumentException("할 일을 입력하세요");
+            }
 
-        TodoDTO newTodo = TodoDTO.builder()
-                .userName(userName)
-                .title(title)
-                .build();
-        todoService.addTodo(newTodo);
-        return "redirect:/todos";
+            User loggedInUser = (User) session.getAttribute("loggedInUser");
+            if (loggedInUser == null) {
+                throw new IllegalArgumentException("로그인을 먼저하십시오.");
+            }
+
+            String userName = loggedInUser.getUserName();
+
+            TodoDTO newTodo = TodoDTO.builder()
+                    .userName(userName)
+                    .title(title)
+                    .build();
+            todoService.addTodo(newTodo);
+            return "redirect:/todos";
+        } catch (IllegalArgumentException e) {
+            log.error("todoList를 추가하다가 오류가 발생하였습니다.: {}", e.getMessage());
+            return "redirect:/todos?error=" + e.getMessage();
+        }
     }
 
     // todoList 상태 변경
     @PostMapping("/todos/{id}/status")
     public String updateTodoStatus(@PathVariable Long id, @RequestParam String status) {
-        todoService.updateTodoStatus(id, status);
-        return "redirect:/todos";
+        try {
+            todoService.updateTodoStatus(id, status);
+            return "redirect:/todos";
+        } catch (IllegalArgumentException e) {
+            log.error("상태 변경하다가 오류가 발새하였습니다.: {}", e.getMessage());
+            return "redirect:/todos?error=" + e.getMessage();
+        }
     }
 }

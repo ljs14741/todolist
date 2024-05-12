@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    Todo findTopByOrderByCreateDtDesc(); // 최근 TODO 조회 메소드
+    List<Todo> findByUserName(String username); // 전체 목록 todoList
+    Todo findTopByUserNameOrderByCreateDtDesc(String username); // 최근 목록 todoList
 }

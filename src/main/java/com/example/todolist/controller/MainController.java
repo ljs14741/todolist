@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MainController {
 
     // 메인화면 호출
-    @RequestMapping("/")
+    @RequestMapping("/login")
     public String user() {
         return "user";
     }

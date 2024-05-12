@@ -65,9 +65,6 @@
             var selectedStatus = form.status.value;
             var currentStatus = document.getElementById("currentStatus").innerText.trim();
 
-            alert("하 selectedStatus: " + selectedStatus);
-            alert("하 currentStatus: " + currentStatus);
-
             if (currentStatus !== "진행 중" && selectedStatus === "대기") {
                 alert("진행 중 상태에서만 대기 상태로 변경할 수 있습니다.");
                 return false;

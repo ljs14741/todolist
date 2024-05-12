@@ -20,15 +20,15 @@ public class TodoServiceImpl implements TodoService {
 
     //    todoList 최근 목록 조회
     @Override
-    public TodoDTO getRecentTodo() {
-        Todo recentTodo = todoRepository.findTopByOrderByCreateDtDesc();
+    public TodoDTO getRecentTodoByUsername(String username) {
+        Todo recentTodo = todoRepository.findTopByUserNameOrderByCreateDtDesc(username);
         return convertToDTO(recentTodo);
     }
 
     //    todoList 전체 목록 조회
     @Override
-    public List<TodoDTO> getAllTodos() {
-        List<Todo> todos = todoRepository.findAll();
+    public List<TodoDTO> getTodosByUserName(String username) {
+        List<Todo> todos = todoRepository.findByUserName(username);
         return todos.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
