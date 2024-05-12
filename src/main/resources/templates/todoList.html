@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO List</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <script th:src="@{/js/todoList.js}"></script>
+</head>
+<body>
+<h1>TODO List</h1>
+
+<h2>최근 TODO</h2>
+<table>
+    <thead>
+    <tr>
+        <th>제목</th>
+        <th>상태</th>
+        <th>작성일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <td th:text="${recentTodo.title}"></td>
+    <td th:text="${recentTodo.status}"></td>
+    <td th:text="${recentTodo.createDt}"></td>
+    </tbody>
+</table>
+
+    <!-- 전체 TODO 목록 -->
+    <h2>전체 TODO 목록</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>상태</th>
+            <th>작성일</th>
+            <th>상태 변경</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 전체 TODO 목록을 Thymeleaf 반복문으로 출력 -->
+        <tr th:each="todo : ${todos}">
+            <td th:text="${todo.title}"></td>
+            <td th:text="${todo.status}" id="currentStatus"></td>
+            <td th:text="${todo.createDt}"></td>
+            <td>
+                <!-- TODO 상태 변경 폼 -->
+                <form th:action="@{'/todos/' + ${todo.id} + '/status'}" method="post" onsubmit="return validateStatusChange(this)">
+                    <select name="status">
+                        <option value="해야할 일">해야할 일</option>
+                        <option value="진행 중">진행 중</option>
+                        <option value="완료">완료</option>
+                        <option value="대기">대기</option>
+                    </select>
+                    <button type="submit">변경</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+<h3>할 일 추가하고 싶으면 뒤로가기 버튼 누르십시오.</h3>
+    <script>
+        function validateStatusChange(form) {
+            var selectedStatus = form.status.value;
+            var currentStatus = document.getElementById("currentStatus").innerText.trim();
+
+            alert("하 selectedStatus: " + selectedStatus);
+            alert("하 currentStatus: " + currentStatus);
+
+            if (currentStatus !== "진행 중" && selectedStatus === "대기") {
+                alert("진행 중 상태에서만 대기 상태로 변경할 수 있습니다.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>

@@ -17,6 +17,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // 회원가입
     @Override
     public User registerUser(String userName, String password) {
         // 패스워드 암호화
@@ -27,28 +28,32 @@ public class UserServiceImpl implements UserService {
         user.setUserName(userName);
         user.setPassword(encodedPassword);
 
-        // DB에 저장
         return userRepository.save(user);
     }
 
-
+    // 유저 조회
     @Override
-    public User loginUser(String userName, String password) {
-        User user = userRepository.findByUserName(userName);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            return user;
-        }
-        return null;
+    public User findByUserName(String userName) {
+        return userRepository.findByUserName(userName);
     }
 
+
+    // 회원탈퇴
     @Override
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
 
 
-    @Override
-    public User findByUserName(String userName) {
-        return userRepository.findByUserName(userName);
-    }
+//    @Override
+//    public User loginUser(String userName, String password) {
+//        User user = userRepository.findByUserName(userName);
+//        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+//            return user;
+//        }
+//        return null;
+//    }
+
+
+
 }

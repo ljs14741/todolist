@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
 <body>
 <h1>User Registration</h1>
@@ -24,7 +25,7 @@
     <button type="submit">Login</button>
 </form>
 
-<h1>User Delete</h1>
+<h1>User Withdrawal</h1>
 <form th:action="@{/api/users/delete}" method="post">
     <label for="delete-username">Username:</label><br>
     <input type="text" id="delete-username" name="username"><br>
@@ -38,6 +39,9 @@
         event.preventDefault();
 
         var formData = new FormData(this);
+
+        var loggedInUserName = '<%= ((User) session.getAttribute("loggedInUser")).getUsername() %>';
+        formData.append("username", loggedInUserName);
 
         fetch('/api/users/login', {
             method: 'POST',
@@ -55,6 +59,7 @@
                 console.error('Error:', error);
             });
     });
+
 </script>
 
 </body>

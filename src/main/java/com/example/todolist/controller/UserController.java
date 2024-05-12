@@ -26,6 +26,7 @@ public class UserController {
     @Autowired
     private HttpSession session;
 
+    // 회원가입
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(HttpServletRequest request) {
         String username = request.getParameter("username");
@@ -39,6 +40,7 @@ public class UserController {
         }
     }
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(HttpServletRequest request) {
         String username = request.getParameter("username");
@@ -57,6 +59,7 @@ public class UserController {
         }
     }
 
+    // 회원탈퇴
     @PostMapping("/delete")
     public ResponseEntity<String> deleteUser(HttpServletRequest request) {
         String username = request.getParameter("username");
