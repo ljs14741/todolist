@@ -4,12 +4,15 @@ import com.example.todolist.dto.UserDTO;
 import com.example.todolist.entity.User;
 import com.example.todolist.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -19,6 +22,9 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private HttpSession session;
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(HttpServletRequest request) {
@@ -41,6 +47,7 @@ public class UserController {
         if (username != null && password != null) {
             User user = userService.findByUserName(username);
             if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+                session.setAttribute("loggedInUser", user);
                 return ResponseEntity.ok("Login successful!");
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
