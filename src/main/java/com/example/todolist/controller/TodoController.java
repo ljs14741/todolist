@@ -63,7 +63,7 @@ public class TodoController {
     }
 
     // todoList 상태 변경
-    @PostMapping("/todos/{id}/status")
+    @PutMapping("/todos/{id}/status")
     public String updateTodoStatus(@PathVariable Long id, @RequestParam String status) {
         try {
             todoService.updateTodoStatus(id, status);
