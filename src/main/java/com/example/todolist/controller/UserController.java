@@ -72,7 +72,7 @@ public class UserController {
     }
 
     // 회원탈퇴
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<String> deleteUser(HttpServletRequest request) {
         try {
             String username = request.getParameter("username");

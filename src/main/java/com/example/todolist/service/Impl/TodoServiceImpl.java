@@ -51,6 +51,14 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public TodoDTO updateTodoStatus(Long id, String status) {
         Todo todo = todoRepository.getById(id);
+        String currentStatus = todo.getStatus();
+
+        // 변경하려는 상태가 "대기"이고, 현재 상태가 "진행 중"이 아닌 경우에만 alert 창을 띄우고 변경을 중단
+        if (status.equals("대기") && !currentStatus.equals("진행 중")) {
+            throw new IllegalArgumentException("진행 중 상태에서만 대기 상태로 변경할 수 있습니다.");
+        }
+
+        // 그 외의 경우에는 상태를 변경하고 저장
         todo.setStatus(status);
         todo.setUpdateDt(LocalDateTime.now().toString());
         Todo updatedTodo = todoRepository.save(todo);

@@ -63,14 +63,14 @@ public class TodoController {
     }
 
     // todoList 상태 변경
-    @PutMapping("/todos/{id}/status")
+    @PostMapping("/todos/{id}/status")
     public String updateTodoStatus(@PathVariable Long id, @RequestParam String status) {
         try {
             todoService.updateTodoStatus(id, status);
             return "redirect:/todos";
         } catch (IllegalArgumentException e) {
             log.error("상태 변경하다가 오류가 발새하였습니다.: {}", e.getMessage());
-            return "redirect:/todos?error=" + e.getMessage();
+            return "redirect:/todos";
         }
     }
 }
