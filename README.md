@@ -8,13 +8,13 @@ http://binary96.store/login<br>
 
 POST /api/users/register: 회원 가입<br>
 POST /api/users/login: 로그인<br>
-DELETE /api/users/delete: 회원 탈퇴<br>
+POST /api/users/delete: 회원 탈퇴<br>
 
 ### todoList API<br>
 
 GET /todos: todoList 목록 조회<br>
 POST /todos/add: todoList 추가<br>
-PUT /todos/{id}/todoList: todolist 상태 변경<br>
+POST /todos/{id}/todoList: todolist 상태 변경<br>
 ## 3. 코드 구조
 
 ![image](https://github.com/ljs14741/todolist/assets/39641715/a4de8ba9-a16d-44db-8156-3825585e8e18)
