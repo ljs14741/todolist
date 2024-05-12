@@ -3,6 +3,7 @@ package com.example.todolist.controller;
 import com.example.todolist.dto.UserDTO;
 import com.example.todolist.entity.User;
 import com.example.todolist.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,28 +21,50 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody UserDTO userDTO) {
-        return userService.registerUser(userDTO.getUserName(), userDTO.getPassword());
-    }
+    public ResponseEntity<String> registerUser(HttpServletRequest request) {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
-    @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody UserDTO userDTO) {
-        User user = userService.findByUserName(userDTO.getUserName());
-        if (user != null && passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-            return ResponseEntity.ok("Login successful!");
+        if (username != null && password != null) {
+            userService.registerUser(username, password);
+            return ResponseEntity.ok("User registered successfully!");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username or password is missing");
         }
     }
 
-    @DeleteMapping("/delete/{username}")
-    public ResponseEntity<String> deleteUser(@PathVariable String username) {
-        User user = userService.findByUserName(username);
-        if (user != null) {
-            userService.deleteUser(user);
-            return ResponseEntity.ok("User deleted successfully!");
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(HttpServletRequest request) {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        if (username != null && password != null) {
+            User user = userService.findByUserName(username);
+            if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+                return ResponseEntity.ok("Login successful!");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            }
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username or password is missing");
+        }
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
+            User user = userService.findByUserName(username);
+            if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+                userService.deleteUser(user);
+                return ResponseEntity.ok("User deleted successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username and password are required");
         }
     }
 

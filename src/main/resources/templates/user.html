@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+</head>
+<body>
+<h1>User Registration</h1>
+<form th:action="@{/api/users/register}" method="post">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    <button type="submit">Register</button>
+</form>
+
+<h1>User Login</h1>
+<form th:action="@{/api/users/login}" method="post">
+    <label for="login-username">Username:</label><br>
+    <input type="text" id="login-username" name="username"><br>
+    <label for="login-password">Password:</label><br>
+    <input type="password" id="login-password" name="password"><br><br>
+    <button type="submit">Login</button>
+</form>
+
+<h1>User Delete</h1>
+<form th:action="@{/api/users/delete}" method="post">
+    <label for="delete-username">Username:</label><br>
+    <input type="text" id="delete-username" name="username"><br>
+    <label for="delete-password">Password:</label><br>
+    <input type="password" id="delete-password" name="password"><br><br>
+    <button type="submit">탈퇴하기</button>
+</form>
+
+</body>
+</html>
