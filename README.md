@@ -2,6 +2,7 @@
 
 ## 1. 과제 접속 링크
 http://binary96.store/login<br>
+2024-05-03 20:00 링크 변경 -> http://binary96.store:8081/login
 
 ## 2. API 목록
 ### 회원 API
